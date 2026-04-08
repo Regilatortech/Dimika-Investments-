@@ -21,10 +21,6 @@
         .open-color { background: #00d97e; }
         .closed-color { background: var(--red); }
 
-        .info-section { padding: 40px 5%; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1100px; margin: auto; }
-        .info-card h2 { color: var(--blue); margin-bottom: 15px; border-left: 4px solid var(--gold); padding-left: 10px; }
-        .info-card p, .info-card li { font-size: 0.95rem; color: #555; margin-bottom: 8px; }
-
         .catalog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 20px 5%; max-width: 1100px; margin: auto; }
         .card { background: white; padding: 25px; border-radius: 20px; border: 1px solid #eee; transition: 0.3s; }
         .price-text { color: var(--blue); font-size: 1.6rem; font-weight: bold; display: block; }
@@ -41,13 +37,13 @@
 
 <div id="adminPanel">
     <h3 style="text-align:center; color:var(--blue); margin-bottom:15px;">Global Price Sync</h3>
-    <input type="number" id="iS" placeholder="Standard Wash">
-    <input type="number" id="iV" placeholder="Full Valet">
-    <input type="number" id="iC" placeholder="Centre Carpet">
-    <input type="number" id="iFi" placeholder="Fitted Carpet">
-    <input type="password" id="token" placeholder="GitHub Token">
+    <input type="number" id="iS" placeholder="Standard Wash Price">
+    <input type="number" id="iV" placeholder="Full Valet Price">
+    <input type="number" id="iC" placeholder="Centre Carpet Price">
+    <input type="number" id="iFi" placeholder="Fitted Carpet Price">
+    <input type="password" id="token" placeholder="Paste GitHub Token">
     <button onclick="updateGlobal()" style="width:100%; padding:15px; background:var(--blue); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer; margin-top:10px;">UPDATE ALL PRICES</button>
-    <button onclick="toggleAdmin()" style="width:100%; background:none; border:none; color:#999; cursor:pointer; margin-top:10px;">Close</button>
+    <button onclick="toggleAdmin()" style="width:100%; background:none; border:none; color:#999; cursor:pointer; margin-top:10px;">Close Panel</button>
 </div>
 
 <nav>
@@ -69,24 +65,11 @@
     <span style="display:block; color: var(--red); font-weight: bold;">Monday: CLOSED</span>
 </div>
 
-<section class="info-section">
-    <div class="info-card">
-        <h2>About Us</h2>
-        <p>Dimika Investments began by cleaning workplaces in Harare, offering professional janitorial and valet services.</p>
-    </div>
-    <div class="info-card">
-        <h2>How It Works</h2>
-        <ul style="list-style:none;">
-            <li>✓ Select Service → Make Booking → Enjoy Results</li>
-        </ul>
-    </div>
-</section>
-
 <div class="catalog-grid">
-    <div class="card"><span class="price-text" id="p-s">US$7.00</span><strong>Standard Wash</strong><p style="font-size:0.8rem; color:#777;">Exterior, Vacuum, Tire Detail</p></div>
-    <div class="card" style="border-top: 3px solid var(--gold);"><span class="price-text" id="p-v">US$30.00</span><strong>Full Valet</strong><p style="font-size:0.8rem; color:#777;">Deep Interior & Polish</p></div>
-    <div class="card"><span class="price-text" id="p-c">US$10.00</span><strong>Centre Carpet</strong><p style="font-size:0.8rem; color:#777;">Deep Shampooing</p></div>
-    <div class="card"><span class="price-text" id="p-fi">US$20.00</span><strong>Fitted Carpet</strong><p style="font-size:0.8rem; color:#777;">Full Room Cleaning</p></div>
+    <div class="card"><span class="price-text" id="p-s">US$7.00</span><strong>Standard Core Wash</strong><p style="font-size:0.8rem; color:#777;">Exterior, Vacuum, Tire Detail</p></div>
+    <div class="card" style="border-top: 3px solid var(--gold);"><span class="price-text" id="p-v">US$30.00</span><strong>Specialized Full Valet</strong><p style="font-size:0.8rem; color:#777;">Deep Clean, Conditioning, Protection</p></div>
+    <div class="card"><span class="price-text" id="p-c">US$10.00</span><strong>Centre Carpet</strong><p style="font-size:0.8rem; color:#777;">Deep Shampooing & Drying</p></div>
+    <div class="card"><span class="price-text" id="p-fi">US$20.00</span><strong>Fitted Carpet</strong><p style="font-size:0.8rem; color:#777;">Full Room Carpet Cleaning</p></div>
 </div>
 
 <div class="booking-box">
@@ -112,8 +95,9 @@
 </footer>
 
 <script>
-    const GITHUB_USER = 'regilatortech';
-    const GITHUB_REPO = 'Dimika-Investments-';
+    // GitHub Configuration
+    const GITHUB_USER = 'Lod-of-tech'; 
+    const GITHUB_REPO = 'Dimika-Investments-'; 
 
     function checkStatus() {
         const now = new Date();
@@ -129,38 +113,41 @@
 
     async function updateGlobal() {
         const token = document.getElementById('token').value;
-        const prices = {
+        const newPrices = {
             s: document.getElementById('iS').value,
             v: document.getElementById('iV').value,
             c: document.getElementById('iC').value,
             fi: document.getElementById('iFi').value
         };
 
+        if (!token) { alert("Token required to sync prices."); return; }
+
         try {
             const getFile = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/index.html`, {
                 headers: { 'Authorization': `token ${token}` }
             });
             const fileData = await getFile.json();
-            
-            // This updates the prices directly in the HTML file on GitHub
             let content = atob(fileData.content);
-            content = content.replace(/id="p-s">US\$.*?<\/span>/, `id="p-s">US$${prices.s}.00</span>`);
-            content = content.replace(/id="p-v">US\$.*?<\/span>/, `id="p-v">US$${prices.v}.00</span>`);
-            content = content.replace(/id="p-c">US\$.*?<\/span>/, `id="p-c">US$${prices.c}.00</span>`);
-            content = content.replace(/id="p-fi">US\$.*?<\/span>/, `id="p-fi">US$${prices.fi}.00</span>`);
 
-            await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/index.html`, {
+            // Conditional replacement: only updates if a value was entered
+            if (newPrices.s) content = content.replace(/id="p-s">US\$.*?<\/span>/, `id="p-s">US$${newPrices.s}.00</span>`);
+            if (newPrices.v) content = content.replace(/id="p-v">US\$.*?<\/span>/, `id="p-v">US$${newPrices.v}.00</span>`);
+            if (newPrices.c) content = content.replace(/id="p-c">US\$.*?<\/span>/, `id="p-c">US$${newPrices.c}.00</span>`);
+            if (newPrices.fi) content = content.replace(/id="p-fi">US\$.*?<\/span>/, `id="p-fi">US$${newPrices.fi}.00</span>`);
+
+            const update = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/index.html`, {
                 method: 'PUT',
                 headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: "Global Price Sync Update",
+                    message: "Partial Price Update",
                     content: btoa(content),
                     sha: fileData.sha
                 })
             });
-            alert("Prices Updated! Reloading site...");
-            location.reload();
-        } catch (e) { alert("Update Failed. Check Token."); }
+
+            if (update.ok) { alert("Price Sync Successful!"); location.reload(); }
+            else { alert("Failed. Check token permissions."); }
+        } catch (e) { alert("Connection Error. Check your internet."); }
     }
 
     window.onload = () => {
