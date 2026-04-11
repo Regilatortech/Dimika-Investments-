@@ -6,54 +6,73 @@
     <title>Dimika Investments | Professional Valet</title>
     <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
     <style>
-        :root { --blue: #1e4b8a; --gold: #c5a059; --green: #25D366; --red: #ff8a7a; --dark: #0a192f; --bg: #f8f9fa; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        :root { 
+            --blue: #0056b3; 
+            --gold: #c5a059; 
+            --green: #25D366; 
+            --red: #ff8a7a; 
+            --dark: #1a1a1a; 
+            --bg: #f4f7f6; 
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
         
-        nav { background: white; padding: 10px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .logo-svg { height: 60px; width: auto; cursor: pointer; }
+        nav { background: white; padding: 10px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .nav-logo { height: 65px; width: auto; cursor: pointer; transition: transform 0.2s; }
+        .nav-logo:active { transform: scale(0.95); }
         
-        header { background: linear-gradient(rgba(10, 25, 47, 0.8), rgba(10, 25, 47, 0.8)), url('https://images.unsplash.com/photo-1520340356584-f9917d1eea6f?auto=format&fit=crop&w=1200'); background-size: cover; color: white; text-align: center; padding: 70px 20px; border-bottom: 4px solid var(--gold); }
+        header { background: linear-gradient(rgba(0, 86, 179, 0.85), rgba(26, 26, 26, 0.9)), url('https://images.unsplash.com/photo-1520340356584-f9917d1eea6f?auto=format&fit=crop&w=1200'); background-size: cover; color: white; text-align: center; padding: 60px 20px; border-bottom: 5px solid var(--blue); }
 
-        .status-container { text-align: center; padding: 30px 10px; background: #fff; }
+        .status-container { text-align: center; padding: 25px 10px; background: #fff; }
         .status-btn-group { display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; }
-        .status-btn { padding: 12px 30px; border-radius: 50px; color: white; font-weight: bold; border: none; font-size: 1rem; opacity: 0.15; transition: 0.4s; }
-        .active-status { opacity: 1; transform: scale(1.05); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .status-btn { padding: 12px 25px; border-radius: 50px; color: white; font-weight: bold; border: none; font-size: 0.9rem; opacity: 0.2; transition: 0.4s; }
+        .active-status { opacity: 1; transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         .open-color { background: #00d97e; }
         .closed-color { background: var(--red); }
 
-        .catalog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 20px 5%; max-width: 1100px; margin: auto; }
-        .card { background: white; padding: 25px; border-radius: 20px; border: 1px solid #eee; transition: 0.3s; }
-        .price-text { color: var(--blue); font-size: 1.6rem; font-weight: bold; display: block; }
+        .catalog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 20px 5%; max-width: 1100px; margin: auto; }
+        .card { background: white; padding: 25px; border-radius: 15px; border: 1px solid #eee; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.05); }
+        .price-text { color: var(--blue); font-size: 1.8rem; font-weight: 800; display: block; margin-bottom: 5px; }
 
-        .booking-box { max-width: 600px; margin: 40px auto; padding: 35px; background: var(--bg); border-radius: 25px; }
-        input, select { width: 100%; padding: 14px; margin: 10px 0; border-radius: 10px; border: 1px solid #ddd; font-size: 1rem; }
-        .btn-wa { background: #25D366; color: white; border: none; padding: 18px; width: 100%; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        /* About Section Styling */
+        .about-section { padding: 40px 5%; max-width: 900px; margin: 30px auto; text-align: center; background: white; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
+        .about-section h2 { color: var(--blue); margin-bottom: 15px; }
+        .about-section p { color: #555; line-height: 1.8; font-size: 1rem; }
 
-        #adminPanel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 400px; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 0 40px rgba(0,0,0,0.4); z-index: 9999; border: 2px solid var(--blue); }
-        footer { text-align: center; padding: 50px 20px; border-top: 1px solid #eee; }
+        .booking-box { max-width: 550px; margin: 40px auto; padding: 35px; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        input, select { width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px; border: 1px solid #ddd; font-size: 1rem; outline: none; }
+        input:focus { border-color: var(--blue); }
+        .btn-wa { background: #25D366; color: white; border: none; padding: 18px; width: 100%; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1.1rem; margin-top: 10px; }
+
+        #adminPanel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 400px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 0 50px rgba(0,0,0,0.5); z-index: 9999; border: 3px solid var(--blue); }
+        footer { text-align: center; padding: 60px 20px; background: #fdfdfd; border-top: 1px solid #eee; }
+        #qr img { max-width: 150px; height: auto; }
     </style>
 </head>
 <body>
 
 <div id="adminPanel">
-    <h3 style="text-align:center; color:var(--blue); margin-bottom:15px;">Global Price Sync</h3>
+    <h3 style="text-align:center; color:var(--blue); margin-bottom:20px;">Global Price Sync</h3>
     <input type="number" id="iS" placeholder="Standard Wash Price">
     <input type="number" id="iV" placeholder="Full Valet Price">
     <input type="number" id="iC" placeholder="Centre Carpet Price">
     <input type="number" id="iFi" placeholder="Fitted Carpet Price">
-    <input type="password" id="token" placeholder="Paste GitHub Token">
+    <hr style="margin: 15px 0; opacity: 0.2;">
+    <input type="password" id="token" placeholder="Paste GitHub Token (repo scope)">
     <button onclick="updateGlobal()" style="width:100%; padding:15px; background:var(--blue); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer; margin-top:10px;">UPDATE ALL PRICES</button>
-    <button onclick="toggleAdmin()" style="width:100%; background:none; border:none; color:#999; cursor:pointer; margin-top:10px;">Close Panel</button>
+    <button onclick="toggleAdmin()" style="width:100%; background:none; border:none; color:#999; cursor:pointer; margin-top:15px;">Cancel</button>
 </div>
 
 <nav>
-    <div onclick="tapLogo()"><svg class="logo-svg" viewBox="0 0 500 400"><path d="M180 50 H280 Q320 50 320 90 V210 Q320 250 280 280 L230 310 L180 280 V50 Z" fill="none" stroke="#1e4b8a" stroke-width="25"/><path d="M190 260 L240 190 L230 190 L265 140 L300 190 L290 190 L240 260 Z" fill="#c5a059"/><text x="250" y="360" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="45" fill="#0a192f">DIMIKA</text></svg></div>
-    <a href="https://wa.me/c/263771255978" style="color: var(--green); font-weight: bold; text-decoration: none; border: 2px solid var(--green); padding: 8px 15px; border-radius: 6px;">VIEW CATALOG</a>
+    <div onclick="tapLogo()">
+        <img src="logo.png" alt="Dimika Logo" class="nav-logo">
+    </div>
+    <a href="https://wa.me/c/263771255978" style="color: var(--green); font-weight: bold; text-decoration: none; border: 2.5px solid var(--green); padding: 10px 20px; border-radius: 8px;">CATALOG</a>
 </nav>
 
 <header>
-    <h1>DIMIKA INVESTMENTS</h1>
-    <p>Professional Mobile & On-Site Valet | Warren Park 1</p>
+    <h1 style="letter-spacing: 2px;">DIMIKA INVESTMENTS</h1>
+    <p style="opacity: 0.9; margin-top: 10px;">Premium Mobile & On-Site Valet | Warren Park 1</p>
 </header>
 
 <div class="status-container">
@@ -61,41 +80,51 @@
         <button id="openBtn" class="status-btn open-color">WE ARE OPEN</button>
         <button id="closedBtn" class="status-btn closed-color">WE ARE CLOSED</button>
     </div>
-    <span style="display:block; font-weight:bold;">Tue - Sun | 08:00 AM - 05:00 PM</span>
-    <span style="display:block; color: var(--red); font-weight: bold;">Monday: CLOSED</span>
+    <p style="font-weight: 600; color: #555;">Tue - Sun: 08:00 AM - 05:00 PM</p>
+    <p style="color: var(--red); font-weight: 700; font-size: 0.85rem; margin-top: 5px;">MONDAY: CLOSED</p>
 </div>
 
 <div class="catalog-grid">
-    <div class="card"><span class="price-text" id="p-s">US$7.00</span><strong>Standard Core Wash</strong><p style="font-size:0.8rem; color:#777;">Exterior, Vacuum, Tire Detail</p></div>
-    <div class="card" style="border-top: 3px solid var(--gold);"><span class="price-text" id="p-v">US$30.00</span><strong>Specialized Full Valet</strong><p style="font-size:0.8rem; color:#777;">Deep Clean, Conditioning, Protection</p></div>
-    <div class="card"><span class="price-text" id="p-c">US$10.00</span><strong>Centre Carpet</strong><p style="font-size:0.8rem; color:#777;">Deep Shampooing & Drying</p></div>
-    <div class="card"><span class="price-text" id="p-fi">US$20.00</span><strong>Fitted Carpet</strong><p style="font-size:0.8rem; color:#777;">Full Room Carpet Cleaning</p></div>
+    <div class="card"><span class="price-text" id="p-s">US$7.00</span><strong>Standard Core Wash</strong><p style="font-size:0.85rem; color:#666; margin-top:8px;">Exterior, Vacuum, Tire Detail</p></div>
+    <div class="card" style="border-top: 4px solid var(--blue);"><span class="price-text" id="p-v">US$30.00</span><strong>Specialized Full Valet</strong><p style="font-size:0.85rem; color:#666; margin-top:8px;">Deep Clean, Interior Protection</p></div>
+    <div class="card"><span class="price-text" id="p-c">US$10.00</span><strong>Centre Carpet</strong><p style="font-size:0.85rem; color:#666; margin-top:8px;">Deep Shampoo & Extraction</p></div>
+    <div class="card"><span class="price-text" id="p-fi">US$20.00</span><strong>Fitted Carpet</strong><p style="font-size:0.85rem; color:#666; margin-top:8px;">Full Room Deep Cleaning</p></div>
 </div>
 
+<section class="about-section">
+    <h2>About Dimika Investments</h2>
+    <p>
+        Based in <strong>Warren Park 1</strong>, Dimika Investments is your premier choice for professional mobile valet and deep carpet cleaning. 
+        We combine high-quality care with convenience, bringing professional detailing directly to your doorstep. From 
+        specialized vehicle valets to fitted carpet shampooing, we ensure a spotless finish every time.
+    </p>
+</section>
+
 <div class="booking-box">
-    <h2 style="text-align:center; margin-bottom:20px;">Book Your Service</h2>
+    <h2 style="text-align:center; color: var(--dark); margin-bottom:25px;">Book a Valet</h2>
     <form id="bookForm">
-        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="text" id="name" placeholder="Your Name" required>
         <select id="serviceSelect" required>
-            <option value="" disabled selected>Choose a Service</option>
+            <option value="" disabled selected>Select Service</option>
             <option value="Standard Wash">Standard Wash ($7.00)</option>
             <option value="Full Valet">Full Valet ($30.00)</option>
             <option value="Centre Carpet">Centre Carpet ($10.00)</option>
             <option value="Fitted Carpet">Fitted Carpet ($20.00)</option>
         </select>
-        <input type="text" id="day" placeholder="Requested Day & Time" required>
+        <input type="text" id="day" placeholder="Preferred Day & Time" required>
         <button type="submit" class="btn-wa">BOOK VIA WHATSAPP</button>
     </form>
 </div>
 
 <footer>
-    <div id="qr" style="margin-bottom:20px;"></div>
-    <p><strong>+263 771 255 978 | +263 783 508 481</strong></p>
-    <div style="font-size: 0.7rem; color: #ccc; margin-top: 20px;">LOD OF TECH PROJECT</div>
+    <div id="qr" style="margin-bottom:25px; display: inline-block; padding: 10px; background: white; border: 1px solid #eee;"></div>
+    <p style="font-size: 0.8rem; color: #777; margin-bottom: 15px;">Scan to visit our website</p>
+    <p style="font-size: 1.1rem; color: var(--dark); margin-bottom: 5px;"><strong>+263 771 255 978</strong></p>
+    <p style="font-size: 0.9rem; color: #777;">+263 783 508 481</p>
+    <div style="font-size: 0.65rem; color: #bbb; margin-top: 40px; letter-spacing: 1px;">POWERED BY LOD OF TECH</div>
 </footer>
 
 <script>
-    // GitHub Configuration
     const GITHUB_USER = 'Lod-of-tech'; 
     const GITHUB_REPO = 'Dimika-Investments-'; 
 
@@ -103,57 +132,65 @@
         const now = new Date();
         const day = now.getDay(), hour = now.getHours();
         const o = document.getElementById('openBtn'), c = document.getElementById('closedBtn');
-        if (day !== 1 && hour >= 8 && hour < 17) { o.classList.add('active-status'); c.classList.remove('active-status'); }
-        else { c.classList.add('active-status'); o.classList.remove('active-status'); }
+        if (day !== 1 && hour >= 8 && hour < 17) { o.classList.add('active-status'); }
+        else { c.classList.add('active-status'); }
     }
 
     let taps = 0;
-    function tapLogo() { taps++; if(taps === 3) toggleAdmin(); setTimeout(() => taps = 0, 500); }
-    function toggleAdmin() { const p = document.getElementById('adminPanel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; }
+    function tapLogo() { 
+        taps++; 
+        if(taps === 3) toggleAdmin(); 
+        setTimeout(() => taps = 0, 600); 
+    }
+    
+    function toggleAdmin() { 
+        const p = document.getElementById('adminPanel'); 
+        p.style.display = (p.style.display === 'block') ? 'none' : 'block'; 
+    }
 
     async function updateGlobal() {
         const token = document.getElementById('token').value;
-        const newPrices = {
+        const prices = {
             s: document.getElementById('iS').value,
             v: document.getElementById('iV').value,
             c: document.getElementById('iC').value,
             fi: document.getElementById('iFi').value
         };
 
-        if (!token) { alert("Token required to sync prices."); return; }
+        if (!token) { alert("Token required to sync."); return; }
 
         try {
-            const getFile = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/index.html`, {
+            const res = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/index.html`, {
                 headers: { 'Authorization': `token ${token}` }
             });
-            const fileData = await getFile.json();
-            let content = atob(fileData.content);
+            const data = await res.json();
+            let content = atob(data.content);
 
-            // Conditional replacement: only updates if a value was entered
-            if (newPrices.s) content = content.replace(/id="p-s">US\$.*?<\/span>/, `id="p-s">US$${newPrices.s}.00</span>`);
-            if (newPrices.v) content = content.replace(/id="p-v">US\$.*?<\/span>/, `id="p-v">US$${newPrices.v}.00</span>`);
-            if (newPrices.c) content = content.replace(/id="p-c">US\$.*?<\/span>/, `id="p-c">US$${newPrices.c}.00</span>`);
-            if (newPrices.fi) content = content.replace(/id="p-fi">US\$.*?<\/span>/, `id="p-fi">US$${newPrices.fi}.00</span>`);
+            if (prices.s) content = content.replace(/id="p-s">US\$.*?<\/span>/, `id="p-s">US$${prices.s}.00</span>`);
+            if (prices.v) content = content.replace(/id="p-v">US\$.*?<\/span>/, `id="p-v">US$${prices.v}.00</span>`);
+            if (prices.c) content = content.replace(/id="p-c">US\$.*?<\/span>/, `id="p-c">US$${prices.c}.00</span>`);
+            if (prices.fi) content = content.replace(/id="p-fi">US\$.*?<\/span>/, `id="p-fi">US$${prices.fi}.00</span>`);
 
             const update = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/index.html`, {
                 method: 'PUT',
                 headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: "Partial Price Update",
+                    message: "Price update from Admin Panel",
                     content: btoa(content),
-                    sha: fileData.sha
+                    sha: data.sha
                 })
             });
 
             if (update.ok) { alert("Price Sync Successful!"); location.reload(); }
-            else { alert("Failed. Check token permissions."); }
-        } catch (e) { alert("Connection Error. Check your internet."); }
+            else { alert("Sync Failed. Check token permissions (repo scope)."); }
+        } catch (e) { alert("Connection Error. Check internet."); }
     }
 
     window.onload = () => {
         checkStatus();
-        const qr = qrcode(0, 'M');
-        qr.addData('https://wa.me/c/263771255978');
+        const qr = qrcode(0, 'L');
+        // UPDATED: Now points to your site URL
+        qr.addData('https://lod-of-tech.github.io/Dimika-Investments-/');
         qr.make();
         document.getElementById('qr').innerHTML = qr.createImgTag(5);
     };
